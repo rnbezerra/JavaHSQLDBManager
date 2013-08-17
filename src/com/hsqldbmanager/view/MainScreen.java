@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import com.hsqldbmanager.DBManager;
+import com.hsqldbmanager.database.QueryHandler;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -126,6 +127,6 @@ public class MainScreen extends JFrame {
 	}
 
 	private void actionPerformedOnBtnExecute(ActionEvent e){
-		JOptionPane.showMessageDialog(null, textArea.getText().replace("\n", ""));
+		QueryHandler.DoQuery(textArea.getText());
 	}
 }

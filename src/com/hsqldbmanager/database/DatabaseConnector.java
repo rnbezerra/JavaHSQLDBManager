@@ -10,10 +10,10 @@ import java.sql.Statement;
 public class DatabaseConnector {
 
 
-    Connection conn;                                                //our connnection to the db - presist for life of program
+    private static Connection connection;                                                //our connnection to the db - presist for life of program
 
     // we dont want this garbage collected until we are done
-    public DatabaseConnector(String db_file_name_prefix) throws Exception {    // note more general exception
+    public static void connect(String db_file_name_prefix) throws Exception {    // note more general exception
 
         // Load the HSQL Database Engine JDBC driver
         // hsqldb.jar should be in the class path or made part of the current jar
@@ -28,20 +28,20 @@ public class DatabaseConnector {
         
         String connectionString = String.format("jdbc:hsqldb:file:{1};shutdown=true", db_file_name_prefix);
         
-        conn = DriverManager.getConnection(connectionString,    // filenames
+        connection = DriverManager.getConnection(connectionString,    // filenames
                                            "SA",                     // username
                                            "");                      // password
     }
 
     public void shutdown() throws SQLException {
 
-        Statement st = conn.createStatement();
+        Statement st = connection.createStatement();
 
         // db writes out to files and performs clean shuts down
         // otherwise there will be an unclean shutdown
         // when program ends
         st.execute("SHUTDOWN");
-        conn.close();    // if there are no other open connection
+        connection.close();    // if there are no other open connection
     }
 
 //use for SQL command SELECT
@@ -50,7 +50,7 @@ public class DatabaseConnector {
         Statement st = null;
         ResultSet rs = null;
 
-        st = conn.createStatement();         // statement objects can be reused with
+        st = connection.createStatement();         // statement objects can be reused with
 
         // repeated calls to execute but we
         // choose to make a new one each time
@@ -72,7 +72,7 @@ public class DatabaseConnector {
 
         Statement st = null;
 
-        st = conn.createStatement();    // statements
+        st = connection.createStatement();    // statements
 
         int i = st.executeUpdate(expression);    // run the query
 
